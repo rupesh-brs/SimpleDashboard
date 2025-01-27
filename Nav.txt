@@ -1,0 +1,224 @@
+import { useState } from "react";
+import Image from "next/image";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faBars, faBell, faUserCircle,  faHome,
+    faTachometerAlt,
+    faTasks,
+    faCar,
+    faChartBar,
+    faMoneyBillWave,
+    faAngleDown,
+    faAngleRight,
+    faMagnifyingGlass,  } from '@fortawesome/free-solid-svg-icons';
+    const menuItems = [
+        {
+          name: "Home",
+          icon: faHome,
+          href: "#",
+        },
+        {
+          name: "Dashboard",
+          icon: faTachometerAlt,
+          dropdown: [
+            { name: "Overview", href: "#" },
+            { name: "Performance", href: "#" },
+            { name: "Settings", href: "#" },
+          ],
+        },
+        {
+          name: "Tasks",
+          icon: faTasks,
+          dropdown: [
+            { name: "My Tasks", href: "#" },
+            { name: "Team Tasks", href: "#" },
+            {
+              name: "Archived Tasks",
+              icon: faTasks,
+              nested: [
+                { name: "Completed Tasks", href: "#" },
+                { name: "Pending Review", href: "#" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Vehicle Loan",
+          icon: faCar,
+          dropdown: [
+            { name: "Loan Applications", href: "#" },
+            { name: "Loan Status", href: "#" },
+          ],
+        },
+        {
+          name: "Reports",
+          icon: faChartBar,
+          dropdown: [
+            { name: "Daily Report", href: "#" },
+            { name: "Monthly Report", href: "#" },
+            {
+              name: "Custom Reports",
+              icon: faChartBar,
+              nested: [
+                { name: "Generate Report", href: "#" },
+                { name: "Saved Reports", href: "#" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "Collection",
+          icon: faMoneyBillWave,
+          dropdown: [
+            { name: "Pending Collections", href: "#" },
+            { name: "Completed Collections", href: "#" },
+          ],
+        },
+      ];
+      export default function ResponsiveNavbar() {
+        const [isMenuOpen, setIsMenuOpen] = useState(false);
+        const [openDropdown, setOpenDropdown] = useState(null);
+        const toggleDropdown = (index:any) => {
+          setOpenDropdown(openDropdown === index ? null : index);
+        };
+        return (
+          <div className="">
+            {/* Top Navbar */}
+            <nav className="bg-white shadow-md">
+              <div className="mx-auto max-w-7xl  px-4 sm:px-6 lg:px-8">
+                <div className="flex h-[75px] items-center justify-between">
+                  {/* Logo */}
+                  <div className="flex-shrink-0">
+                   <Image src="/assets/logo.png" width={50} height={50} alt='logo' className=''/>
+                  </div>
+                  {/* Notification & User Profile */}
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                    <button
+                      type="button"
+                      className="rounded-full p-1 mt-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                    >
+                      <FontAwesomeIcon icon={faBell} className="h-5 w-5" color="#C1CCD1" style={{ fill: "none" }} />
+                      {/* <span className="sr-only">View notifications</span> */}
+                    </button>
+                    <div className="absolute top-1 -left-1 bg-red-500 shadow-md text-white rounded-full w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold">
+                      0
+                    </div>
+                    </div>
+                    <p className="text-[24px] font-extralight text-[#8EA3B6]">|</p>
+                    <div className="flex items-center space-x-2 text-slate-400">
+                    <img
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt="User"
+                      className="h-7 w-7 rounded-full"
+                    />
+                     <p className="text-[14px] text-[#8EA3B6] font-medium">
+                         VSF Nyros Technologies
+                     </p>
+                    </div>
+                  </div>
+                  {/* Toggle Button for Mobile */}
+                  <button
+                    onMouseOver={() => setIsMenuOpen(!isMenuOpen)}
+                    className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:text-gray-800 sm:hidden"
+                  >
+                    {isMenuOpen ? (
+                      <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
+                    ) : (
+                      <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </nav>
+            {/* Bottom Navigation (Main Menu) */}
+            <div
+              className={`${
+                isMenuOpen ? "block" : "hidden"
+              } sm:block bg-[#444D58]  text-white`}
+            >
+              <div className="mx-auto max-w-7xl flex flex-row justify-between items-center px-4 sm:px-6 lg:px-8">
+                <div className="space-y-1  sm:flex sm:space-y-0 sm:space-x-2">
+                  {menuItems.map((menu, index) => (
+                    <div key={menu.name} className="relative">
+                      <button
+                        onMouseOver={() => toggleDropdown(index)}
+                        className="flex w-full items-center justify-between px-3 py-4 text-sm font-medium hover:bg-gray-600 sm:w-auto"
+                      >
+                        <div className="flex items-center space-x-1">
+                          <FontAwesomeIcon icon={menu.icon} className="h-4 w-4"  color="#BCC2CB"/>
+                          <span className="text-[#BCC2CB]">{menu.name}</span>
+                        </div>
+                        {/* {menu.dropdown && (
+                          <FontAwesomeIcon
+                            icon={faAngleDown}
+                            className="ml-2 h-4 w-4"
+                          />
+                        )} */}
+                      </button>
+                      {/* Dropdown Menu */}
+                      {menu.dropdown && openDropdown === index && (
+                        <div className=" rounded-sm bg-[#55616F] text-white shadow-lg sm:absolute sm:mt-0 sm:w-48">
+                          {menu.dropdown.map((subMenu, subIndex) => (
+                            <div key={subIndex} className="relative">
+                              {!subMenu.nested ? (
+                              <div className="flex flex-row items-center hover:bg-gray-600">
+                             <FontAwesomeIcon icon={menu.icon} className="h-4 w-4 ml-2  text-[#CED5DE]"  />
+                                <a
+                                  href={subMenu.href}
+                                  className="block text-[14px] text-[#CED5DE] px-4 py-2 w-full text-sm hover:bg-gray-600"
+                                >
+                                  {subMenu.name}
+                                </a>
+                                </div>
+                              ) : (
+                                <div className="group relative">
+                                  <div className="flex flex-row items-center hover:bg-gray-600">
+                             <FontAwesomeIcon icon={menu.icon} className="h-4 w-4 ml-2  text-[#CED5DE]"  />
+                                  <button className="flex w-full text-[#CED5DE] items-center justify-between px-4 py-2 text-sm hover:bg-gray-600">
+                                    {subMenu.name}
+                                    <FontAwesomeIcon
+                                      icon={faAngleRight}
+                                      className=" h-4 w-4"
+                                    />
+                                  </button>
+                                  </div>
+                                  {/* Nested Dropdown */}
+                                  <div className="absolute left-full top-0 ml-1 hidden w-48 bg-[#55616F] rounded-sm shadow-lg  group-hover:block">
+                                    {subMenu.nested.map((nestedItem, nestedIndex) => (
+                                      <div className="flex flex-row items-center hover:bg-gray-600">
+                                         <FontAwesomeIcon icon={menu.icon} className="h-4 w-4 ml-2  text-[#CED5DE]"  />
+                                        <a
+                                        key={nestedIndex}
+                                        href={nestedItem.href}
+                                        className="block text-[14px] text-[#CED5DE] px-4 py-2 w-full text-sm hover:bg-gray-600"
+                                      >
+                                        {nestedItem.name}
+                                      </a>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {/*  Search bar */}
+                <div className="flex flex-row items-center justify-between py-2 px-4">
+  <button className="text-white bg-[#32C5D2] rounded-sm px-4 py-[7px] focus:outline-none">
+    <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4 w-4 " />
+  </button>
+  <input
+    type="text"
+    placeholder="Search..."
+    className="bg-white text-black rounded-r-sm -ml-[1px] w-[150px] pl-4 pr-2 py-[7px] focus:w-[300px] focus:px-4 focus:outline-none transition-all duration-200 ease-in-out"
+  />
+</div>
+              </div>
+            </div>
+          </div>
+        );
+      }
