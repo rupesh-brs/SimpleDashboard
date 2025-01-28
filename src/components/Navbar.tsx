@@ -21,7 +21,7 @@ const menuItems = [
 
 export default function Navbar() {
     const [hoveredMenu, setHoveredMenu] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = (menu) => {
         setHoveredMenu(menu === hoveredMenu ? null : menu);
