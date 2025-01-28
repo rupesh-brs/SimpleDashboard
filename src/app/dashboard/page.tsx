@@ -4,9 +4,11 @@ import Footer from "@/components/Footer";
 
 export default function Dashboard() {
     return (
-        <div className="flex flex-col justify-between items-start">
+        <div className="flex flex-col min-h-screen">
             <Navbar />
-            <Main />
+            <main className="flex-grow w-full p-4 md:p-8">
+                <Main />
+            </main>
             <Footer />
         </div>
     );
