@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { FiHome } from "react-icons/fi";
 import { FaTasks, FaMoneyBillAlt } from "react-icons/fa";
 import { GiNetworkBars } from "react-icons/gi";
-import { BsCollectionFill } from "react-icons/bs";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { BsCollectionFill} from "react-icons/bs";
+import { RiArrowDropDownLine, RiMenuLine, RiCloseLine } from "react-icons/ri";
 import { CiGrid41 } from "react-icons/ci";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
@@ -21,7 +21,7 @@ const menuItems = [
 
 export default function Navbar() {
     const [hoveredMenu, setHoveredMenu] = useState(null);
-    // const [isOpen, setIsOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const toggleDropdown = (menu) => {
         setHoveredMenu(menu === hoveredMenu ? null : menu);
@@ -35,8 +35,14 @@ export default function Navbar() {
         setHoveredMenu(null);
     };
 
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+
     return (
         <div className="flex flex-col justify-center items-center">
+            {/* Top Bar */}
             <div className="w-full bg-white min-h-[90px] flex flex-col md:flex-row gap-4 md:gap-12 items-center justify-between px-4 md:px-12 border-s-white border-b-2 shadow-2xl">
                 <Image src='/logo.png' width={50} height={50} alt="logo" className='rounded-md' />
                 <Image src='/pooja.png' width={50} height={50} alt="logo" className='rounded-md' />
@@ -49,35 +55,52 @@ export default function Navbar() {
                 </div>
             </div>
             
+            {/* Navbar */}
             <div className="w-screen bg-gray-700 min-h-[90px] flex flex-col md:flex-row gap-4 md:gap-12 items-center px-4 md:px-12 border-s-white border-b-2 shadow-2xl">
-                {menuItems.map((item, index) => (
-                    <div
-                        key={index}
-                        className="relative flex items-center gap-2 cursor-pointer"
-                        onMouseEnter={() => handleMouseEnter(item.name.toLowerCase())}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={() => item.dropdown && toggleDropdown(item.name.toLowerCase())}
-                    >
-                        {item.icon}
-                        <h1 className="text-white">{item.name}</h1>
-                        {item.dropdown && (
-                            <>
-                              <RiArrowDropDownLine color='white' size={20} />
-                                {hoveredMenu === item.name.toLowerCase() && (
-                                    <div className="absolute top-full mt-2 w-32 bg-gray-100 shadow-lg  p-2 z-10 px-0">
-                                        <ul>
-                                            {item.dropdown.map((subItem, subIndex) => (
-                                                <li key={subIndex} className="p-2 hover:bg-gray-200 cursor-pointer">{subItem}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                    </div>
-                ))}
+                {/* Mobile Menu Toggle */}
+                <div className="md:hidden flex items-center justify-between w-full">
+                    <button onClick={toggleMobileMenu} className="text-white">
+                        {isMobileMenuOpen ? <RiCloseLine size={30} /> : <RiMenuLine size={30} />}
+                    </button>
+                    <input 
+                        type="text" 
+                        placeholder="Search..." 
+                        className="bg-white text-black rounded-md px-4 py-2 w-1/2 focus:outline-none focus:ring focus:ring-cyan-500"
+                    />
+                </div>
+
+                {/* Menu Items */}
+                <div className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-4 md:gap-12 items-center w-full md:w-auto`}>
+                    {menuItems.map((item, index) => (
+                        <div
+                            key={index}
+                            className="relative flex items-center gap-2 cursor-pointer"
+                            onMouseEnter={() => handleMouseEnter(item.name.toLowerCase())}
+                            onMouseLeave={handleMouseLeave}
+                            onClick={() => item.dropdown && toggleDropdown(item.name.toLowerCase())}
+                        >
+                            {item.icon}
+                            <h1 className="text-white">{item.name}</h1>
+                            {item.dropdown && (
+                                <>
+                                  <RiArrowDropDownLine color='white' size={20} />
+                                    {hoveredMenu === item.name.toLowerCase() && (
+                                        <div className="absolute top-full mt-2 w-48 bg-gray-100 shadow-lg p-2 z-10">
+                                            <ul>
+                                                {item.dropdown.map((subItem, subIndex) => (
+                                                    <li key={subIndex} className="p-2 hover:bg-gray-200 cursor-pointer text-black">{subItem}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
                 
-                <div className="ml-auto w-full md:w-1/4">
+                {/* Desktop Search Bar */}
+                <div className="hidden md:block ml-auto w-full md:w-1/4">
                     <input 
                         type="text" 
                         placeholder="Search..." 
